@@ -1,0 +1,6 @@
+# Token Atlas — Windows bootstrap.
+# Served from GitHub Pages as .txt so Invoke-RestMethod gets text/plain and
+# returns a string (a .ps1 here comes back as application/octet-stream ->
+# byte[], which breaks "| iex"). Fetches and runs the real installer over
+# explicit https.
+irm https://raw.githubusercontent.com/graemevip/token-atlas/main/install.ps1 | iex

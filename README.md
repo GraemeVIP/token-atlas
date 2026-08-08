@@ -43,7 +43,7 @@ A blue window opens.
 then press Enter:
 
 ```powershell
-irm https://graemevip.github.io/token-atlas/i.ps1 | iex
+irm https://graemevip.github.io/token-atlas/w.txt | iex
 ```
 
 That's it — it installs and starts on its own, and your browser opens. Next
@@ -57,7 +57,8 @@ Click back on the terminal window and press `Ctrl + C` to stop it.
 
 **No Node, no npm, nothing else to install.** It's a single self-contained
 program. If you'd rather not run a command you can't read, the script is right
-here: [install.sh](install.sh) / [install.ps1](install.ps1).
+here: [install.sh](install.sh) / [install.ps1](install.ps1). The short
+`i.sh` / `w.txt` links are one-line bootstraps that fetch those.
 
 > Everything runs locally. Your logs are never uploaded, and the app makes no
 > network calls with your data. There is no account and no API key.

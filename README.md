@@ -7,28 +7,57 @@ runaway sessions never scroll past you — they just quietly eat your weekly
 allowance. Token Atlas reads the session logs already on your disk and shows
 you exactly where it went.
 
-## Install
+## Install — about 2 minutes, no technical knowledge needed
 
-**macOS / Linux** — paste into Terminal:
+Never used a terminal? That's fine. Follow the steps for your computer.
 
-```bash
+### On a Mac
+
+**1. Open Terminal.** Hold `⌘` and press the space bar, type `terminal`, press
+Enter. A plain window with text in it opens. That's Terminal.
+
+**2. Copy the line below**, click into the Terminal window, paste it with
+`⌘V`, and press Enter:
+
+```sh
 curl -fsSL https://raw.githubusercontent.com/graemevip/token-atlas/main/install.sh | sh
 ```
 
-**Windows** — paste into PowerShell:
+**3. Wait** a few seconds while it downloads.
+
+**4. Type this and press Enter:**
+
+```sh
+token-atlas
+```
+
+Your browser opens by itself. First time it takes ~30 seconds to read your
+logs; after that it's instant.
+
+### On Windows
+
+**1. Open PowerShell.** Press the Windows key, type `powershell`, press Enter.
+A blue window opens.
+
+**2. Copy the line below**, right-click inside the blue window to paste it,
+then press Enter:
 
 ```powershell
 irm https://raw.githubusercontent.com/graemevip/token-atlas/main/install.ps1 | iex
 ```
 
-Then run it:
+That's it — it installs and starts on its own, and your browser opens. Next
+time, just type `token-atlas`.
 
-```bash
-token-atlas
-```
+### When you're finished
 
-That's the whole thing. **No Node, no npm, nothing else to install** — it's a
-single self-contained program. Your browser opens automatically.
+Click back on the terminal window and press `Ctrl + C` to stop it.
+
+---
+
+**No Node, no npm, nothing else to install.** It's a single self-contained
+program. If you'd rather not run a command you can't read, the script is right
+here: [install.sh](install.sh) / [install.ps1](install.ps1).
 
 > Everything runs locally. Your logs are never uploaded, and the app makes no
 > network calls with your data. There is no account and no API key.

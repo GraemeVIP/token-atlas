@@ -1,11 +1,19 @@
 {
   "name": "token-atlas",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "verify": "node --experimental-strip-types --import ./scripts/register.mjs scripts/verify.mjs",
+    "test:week": "node --experimental-strip-types --import ./scripts/register.mjs scripts/test-week.mjs",
+    "findings": "node --experimental-strip-types --import ./scripts/register.mjs scripts/findings.mjs",
+    "subagents": "node --experimental-strip-types --import ./scripts/register.mjs scripts/subagents.mjs",
+    "prepublishOnly": "npm run build && node scripts/prepack.mjs",
+    "start:cli": "node bin/token-atlas.mjs",
+    "build:static": "node scripts/build-static.mjs",
+    "embed": "node scripts/embed-assets.mjs",
+    "build:binary": "npm run build:static && npm run embed && node scripts/compile.mjs"
   },
   "dependencies": {
     "next": "16.3.0",
@@ -19,5 +27,41 @@
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "type": "module",
+  "description": "See where your Claude Code and Codex tokens actually go \u2014 background agents, auto review and runaway sessions. Runs locally, uploads nothing.",
+  "license": "MIT",
+  "bin": {
+    "token-atlas": "bin/token-atlas.mjs"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "files": [
+    "bin/",
+    ".next/standalone/",
+    ".next/static/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "claude-code",
+    "codex",
+    "tokens",
+    "usage",
+    "llm",
+    "cost",
+    "dashboard",
+    "openai",
+    "anthropic"
+  ],
+  "author": "Graeme (@graemevip)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graemevip/token-atlas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/graemevip/token-atlas/issues"
+  },
+  "homepage": "https://github.com/graemevip/token-atlas#readme"
 }

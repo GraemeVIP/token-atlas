@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scan cache (rebuildable from the logs on disk)
+.cache/
+.cache/
+out/
+dist/
+server/assets.ts
+.api-parked/

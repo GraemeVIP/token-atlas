@@ -1,26 +1,411 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ------------------------------------------------------------------ */
+/* Palette — validated categorical slots, light + dark steps.          */
+/* Dark values are declared under both the OS media query and the      */
+/* [data-theme] scope so the in-app toggle wins in both directions.    */
+/* ------------------------------------------------------------------ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  color-scheme: light;
+
+  --surface-1: #fcfcfb;
+  --plane: #f9f9f7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  --ghost: rgba(11, 11, 11, 0.04);
+
+  --series-1: #2a78d6; /* blue    */
+  --series-2: #eb6834; /* orange  */
+  --series-3: #1baf7a; /* aqua    */
+  --series-4: #eda100; /* yellow  */
+  --series-5: #e87ba4; /* magenta */
+  --series-6: #008300; /* green   */
+  --series-7: #4a3aa7; /* violet  */
+  --series-8: #e34948; /* red     */
+
+  --dim: #c3c2b7; /* de-emphasis for sparklines/context */
+
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+
+  --seq-100: #cde2fb;
+  --seq-250: #86b6ef;
+  --seq-400: #3987e5;
+  --seq-550: #1c5cab;
+  --seq-700: #0d366b;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+
+    --surface-1: #1a1a19;
+    --plane: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255, 255, 255, 0.1);
+    --ghost: rgba(255, 255, 255, 0.05);
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
+    --series-6: #008300;
+    --series-7: #9085e9;
+    --series-8: #e66767;
+
+    --dim: #383835;
+    --good: #0ca30c;
   }
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface-1: #1a1a19;
+  --plane: #0d0d0d;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --ghost: rgba(255, 255, 255, 0.05);
+
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+
+  --dim: #383835;
+  --good: #0ca30c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: var(--plane);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------------ */
+/* Chrome                                                              */
+/* ------------------------------------------------------------------ */
+
+.card {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 3px 0 0;
+  line-height: 1.45;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Controls -------------------------------------------------------- */
+
+.seg {
+  display: inline-flex;
+  background-color: var(--ghost);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 2px;
+  gap: 2px;
+  /* on narrow screens the control scrolls itself rather than clipping
+     options the user can then never reach */
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.seg::-webkit-scrollbar {
+  display: none;
+}
+
+.seg button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 5px 11px;
+  border-radius: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s;
+}
+
+.seg button:hover {
+  color: var(--text-primary);
+}
+
+.seg button[aria-pressed="true"] {
+  background-color: var(--surface-1);
+  color: var(--text-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+}
+
+.btn {
+  appearance: none;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.12s, color 0.12s;
+}
+
+.btn:hover:not(:disabled) {
+  background-color: var(--ghost);
+  color: var(--text-primary);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+select.btn {
+  padding-right: 26px;
+  max-width: 190px;
+}
+
+/* Focus visibility for keyboard users */
+button:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 2px;
+}
+
+/* Legend ---------------------------------------------------------- */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  align-items: center;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+.legend-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2.5px;
+  flex: none;
+}
+
+/* Table ----------------------------------------------------------- */
+
+.tbl {
+  width: 100%;
+  /* Below this the numeric columns would truncate; the wrapping .scroll-x
+     container takes over and scrolls instead of clipping values. */
+  min-width: 366px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+/* Six-column tables need more room before they start clipping. */
+.tbl.wide {
+  min-width: 560px;
+}
+
+.tbl td,
+.tbl th {
+  white-space: nowrap;
+}
+
+.tbl th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 0 10px 7px 0;
+  border-bottom: 1px solid var(--grid);
+  white-space: nowrap;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.tbl th.num,
+.tbl td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tbl td {
+  padding: 7px 10px 7px 0;
+  border-bottom: 1px solid var(--grid);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+
+.tbl tbody tr:hover td {
+  background-color: var(--ghost);
+}
+
+.tbl td:first-child {
+  color: var(--text-primary);
+}
+
+.tbl tr:last-child td {
+  border-bottom: 0;
+}
+
+.th-btn {
+  appearance: none;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+
+.th-btn:hover {
+  color: var(--text-primary);
+}
+
+/* Explainers ------------------------------------------------------ */
+
+.infodot {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background-color: var(--ghost);
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.infodot:hover,
+.infodot[aria-expanded="true"] {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.infopop {
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 0;
+  z-index: 70;
+  width: max-content;
+  max-width: 288px;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text-secondary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  white-space: normal;
+}
+
+/* Tooltip --------------------------------------------------------- */
+
+.tip {
+  position: fixed;
+  z-index: 60;
+  pointer-events: none;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 11px;
+  font-size: 12px;
+  color: var(--text-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  min-width: 150px;
+  line-height: 1.5;
+}
+
+.tip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  white-space: nowrap;
+}
+
+.tip-row span:last-child {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scroll containers: wide content scrolls itself, never the page */
+.scroll-x {
+  overflow-x: auto;
+  max-width: 100%;
 }

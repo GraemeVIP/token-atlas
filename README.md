@@ -20,7 +20,7 @@ Enter. A plain window with text in it opens. That's Terminal.
 `⌘V`, and press Enter:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/graemevip/token-atlas/main/install.sh | sh
+curl -fsSL https://graemevip.github.io/token-atlas/i.sh | sh
 ```
 
 **3. Wait** a few seconds while it downloads.
@@ -43,7 +43,7 @@ A blue window opens.
 then press Enter:
 
 ```powershell
-irm https://raw.githubusercontent.com/graemevip/token-atlas/main/install.ps1 | iex
+irm https://graemevip.github.io/token-atlas/i.ps1 | iex
 ```
 
 That's it — it installs and starts on its own, and your browser opens. Next
